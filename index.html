@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cars Plus</title>
+<style>
+body{margin:0;background:#111;color:white;text-align:center;font-family:Arial;overflow:hidden}
+h1{color:#ffcc00}
+#game{width:300px;height:500px;background:#333;margin:auto;position:relative;overflow:hidden;border:3px solid #ffcc00;border-radius:10px}
+#player{position:absolute;width:50px;height:90px;background:#ffcc00;bottom:20px;left:125px;border-radius:10px;font-size:40px;line-height:90px}
+.enemy{position:absolute;width:50px;height:90px;background:red;border-radius:10px;font-size:40px;line-height:90px}
+button{padding:12px 25px;font-size:18px;background:#ffcc00;border:none;border-radius:10px;font-weight:bold;margin:5px}
+</style>
+</head>
+<body>
+<h1>CARS PLUS 🚗</h1>
+<div id="score">النقط: 0</div>
+<div id="game"><div id="player">🚗</div></div>
+<br>
+<button onclick="moveLeft()">⬅️ يسار</button>
+<button onclick="moveRight()">يمين ➡️</button>
+<br><br>
+<button onclick="startGame()">ابدأ اللعب ▶️</button>
+<script>
+let player=document.getElementById('player');
+let game=document.getElementById('game');
+let scoreEl=document.getElementById('score');
+let px=125,score=0,playing=false,interval;
+function moveLeft(){if(px>10){px-=25;player.style.left=px+'px'}}
+function moveRight(){if(px<240){px+=25;player.style.left=px+'px'}}
+function startGame(){
+score=0;playing=true;
+document.querySelectorAll('.enemy').forEach(e=>e.remove());
+clearInterval(interval);
+interval=setInterval(()=>{
+if(!playing) return;
+score++;scoreEl.innerText='النقط: '+score;
+if(Math.random()<0.08){
+let enemy=document.createElement('div');
+enemy.className='enemy';enemy.innerText='🚙';
+enemy.style.left=Math.floor(Math.random()*5)*55+10+'px';
+enemy.style.top='-100px';game.appendChild(enemy);
+}
+document.querySelectorAll('.enemy').forEach(enemy=>{
+let top=parseInt(enemy.style.top)+8;
+enemy.style.top=top+'px';
+let ex=parseInt(enemy.style.left);
+if(top>380&&top<470&&Math.abs(ex-px)<40){
+alert('خسرتي! النقط ديالك: '+score);
+playing=false;clearInterval(interval);
+}
+if(top>500) enemy.remove();
+});
+},30);
+}
+</script>
+</body>
+</html>
